@@ -1,0 +1,6 @@
+#!/bin/bash
+# -*- ENCODING: UTF-8 -*-
+echo comenzando backup de volúmenes mongodb ...
+
+docker run -v mongodb-writer_mainflux-mongodb-db-volume:/volume -v /tmp:/backup --rm loomchild/volume-backup backup - > mongodb-writer_mainflux-mongodb-db-volume.tar.bz2
+echo mongodb-writer_mainflux-mongodb-db-volume ok ...
