@@ -4,6 +4,7 @@
 
 ## Para las bd postgres 
 * exportar las base de datos users.sql thigs.sql atuh.sql
+* por ejemplo: docker exec -it aa75 pg_dump -U mainflux -W -h localhost things > things.sql
 * luego en el docker nuevo frenar el proceso, se cae el docker y cargamos el sql con psql, siempre usando el usuario de postgres -U mainflux
 
 
