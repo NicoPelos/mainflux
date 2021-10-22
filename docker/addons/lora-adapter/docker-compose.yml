@@ -21,7 +21,7 @@ services:
       - docker_mainflux-base-net
 
   lora-adapter:
-    image: mainflux/lora:${MF_RELEASE_TAG}
+    image: mainflux/lora:0.12.1
     container_name: mainflux-lora
     restart: on-failure
     environment:
