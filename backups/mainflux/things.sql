@@ -1,4 +1,3 @@
-Password: 
 --
 -- PostgreSQL database dump
 --
