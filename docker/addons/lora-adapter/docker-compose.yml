@@ -21,7 +21,7 @@ services:
       - docker_mainflux-base-net
 
   lora-adapter:
-    image: mainflux/lora:0.12.1
+    image: mainflux/lora:0.11.0
     container_name: mainflux-lora
     restart: unless-stopped
     environment:
