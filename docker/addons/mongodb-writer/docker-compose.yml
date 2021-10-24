@@ -22,7 +22,7 @@ services:
   mongodb:
     image: mongo:4.4.6
     container_name: mainflux-mongodb
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MONGO_INITDB_DATABASE: ${MF_MONGO_WRITER_DB}
     ports:
@@ -38,7 +38,7 @@ services:
     container_name: mainflux-mongodb-writer
     depends_on:
       - mongodb
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_MONGO_WRITER_LOG_LEVEL: ${MF_MONGO_WRITER_LOG_LEVEL}
       MF_NATS_URL: ${MF_NATS_URL}

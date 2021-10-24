@@ -20,7 +20,7 @@ services:
   influxdb:
     image: influxdb:1.8.5
     container_name: mainflux-influxdb
-    restart: on-failure
+    restart: unless-stopped
     environment:
       INFLUXDB_DB: ${MF_INFLUXDB_DB}
       INFLUXDB_ADMIN_USER: ${MF_INFLUXDB_ADMIN_USER}
@@ -38,7 +38,7 @@ services:
     container_name: mainflux-influxdb-writer
     depends_on:
       - influxdb
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_INFLUX_WRITER_LOG_LEVEL: debug
       MF_NATS_URL: ${MF_NATS_URL}
@@ -63,7 +63,7 @@ services:
  #   container_name: mainflux-grafana
  #   depends_on:
  #     - influxdb
- #   restart: on-failure
+ #   restart: unless-stopped
  #   ports:
  #     - ${MF_INFLUX_WRITER_GRAFANA_PORT}:${MF_GRAFANA_PORT}
  #   networks:

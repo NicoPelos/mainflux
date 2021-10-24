@@ -20,7 +20,7 @@ services:
   ui:
     image: mainflux/ui:latest
     container_name: mainflux-ui
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - ./nginx/entrypoint-ui.sh:/entrypoint.sh
     ports:
@@ -35,7 +35,7 @@ services:
   nginx:
     image: nginx:1.20.0-alpine
     container_name: mainflux-nginx
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - ./nginx/nginx-${AUTH-key}.conf:/etc/nginx/nginx.conf.template
       - ./nginx/entrypoint.sh:/entrypoint.sh
@@ -65,7 +65,7 @@ services:
     image: nats:2.2.4-alpine
     container_name: mainflux-nats
     command: "-c /etc/nats/nats.conf"
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - ./nats/:/etc/nats
     networks:
@@ -74,7 +74,7 @@ services:
   auth-db:
     image: postgres:13.3-alpine
     container_name: mainflux-auth-db
-    restart: on-failure
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${MF_AUTH_DB_USER}
       POSTGRES_PASSWORD: ${MF_AUTH_DB_PASS}
@@ -91,7 +91,7 @@ services:
       - auth-db
     expose:
       - ${MF_AUTH_GRPC_PORT}
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_AUTH_LOG_LEVEL: ${MF_AUTH_LOG_LEVEL}
       MF_AUTH_DB_HOST: auth-db
@@ -112,7 +112,7 @@ services:
   users-db:
     image: postgres:13.3-alpine
     container_name: mainflux-users-db
-    restart: on-failure
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${MF_USERS_DB_USER}
       POSTGRES_PASSWORD: ${MF_USERS_DB_PASS}
@@ -130,7 +130,7 @@ services:
     depends_on:
       - users-db
       - auth
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_USERS_LOG_LEVEL: ${MF_USERS_LOG_LEVEL}
       MF_USERS_DB_HOST: users-db
@@ -160,7 +160,7 @@ services:
   things-db:
     image: postgres:13.3-alpine
     container_name: mainflux-things-db
-    restart: on-failure
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${MF_THINGS_DB_USER}
       POSTGRES_PASSWORD: ${MF_THINGS_DB_PASS}
@@ -173,7 +173,7 @@ services:
   auth-redis:
     image: redis:6.2.2-alpine
     container_name: mainflux-auth-redis
-    restart: on-failure
+    restart: unless-stopped
     networks:
       - mainflux-base-net
     volumes:
@@ -185,7 +185,7 @@ services:
     depends_on:
       - things-db
       - auth
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_THINGS_LOG_LEVEL: ${MF_THINGS_LOG_LEVEL}
       MF_THINGS_DB_HOST: things-db
@@ -222,7 +222,7 @@ services:
   vernemq:
     image: mainflux/vernemq:${MF_RELEASE_TAG}
     container_name: mainflux-vernemq
-    restart: on-failure
+    restart: unless-stopped
     environment:
       DOCKER_VERNEMQ_ALLOW_ANONYMOUS: ${MF_DOCKER_VERNEMQ_ALLOW_ANONYMOUS}
       DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL: ${MF_DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL}
@@ -238,7 +238,7 @@ services:
       - vernemq
       - things
       - nats
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_MQTT_ADAPTER_LOG_LEVEL: ${MF_MQTT_ADAPTER_LOG_LEVEL}
       MF_MQTT_ADAPTER_MQTT_PORT: ${MF_MQTT_ADAPTER_MQTT_PORT}
@@ -263,7 +263,7 @@ services:
     depends_on:
       - things
       - nats
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_HTTP_ADAPTER_LOG_LEVEL: debug
       MF_HTTP_ADAPTER_PORT: ${MF_HTTP_ADAPTER_PORT}
@@ -279,7 +279,7 @@ services:
   es-redis:
     image: redis:6.2.2-alpine
     container_name: mainflux-es-redis
-    restart: on-failure
+    restart: unless-stopped
     networks:
       - mainflux-base-net
     volumes:
@@ -291,7 +291,7 @@ services:
     depends_on:
       - things
       - nats
-    restart: on-failure
+    restart: unless-stopped
     environment:
       MF_COAP_ADAPTER_LOG_LEVEL: ${MF_COAP_ADAPTER_LOG_LEVEL}
       MF_COAP_ADAPTER_PORT: ${MF_COAP_ADAPTER_PORT}
